@@ -8,7 +8,7 @@ function createPlayer (name, marker) {
 
 const gameController = (function()  {
     const player1 = createPlayer('Timmy', 'O');
-    const player2 = createPlayer('Billy', 'x');
+    const player2 = createPlayer('Billy', 'X');
 
     let currentPlayer = player1;
 
@@ -23,18 +23,14 @@ const gameController = (function()  {
 
         // Check columns
         for (let i = 0; i < 3; i++) {
-            if (b[i] === b[i + 3] && b[i] === b[i + 6]) {
+            if (b[i] && b[i] === b[i + 3] && b[i] === b[i + 6]) {
                 return true;
             }
         }
 
         // Check diagonals
-        if (b[0] && b[0] === b[4] && b[0] === b[8]) {
-            return true;  
-        }
-        if (b[2] && b[2] === b[4] && b[2] === b[6]) {
-            return true;  
-        }
+        if (b[0] && b[0] === b[4] && b[0] === b[8]) return true;
+        if (b[2] && b[2] === b[4] && b[2] === b[6]) return true;
 
         return false;
     };
@@ -42,6 +38,7 @@ const gameController = (function()  {
     const makeTurn = (index) => {
         if (gameBoard.board[index] == "") {
             gameBoard.board[index] = currentPlayer.marker;
+            displayController.renderBoard();
         }
         
         if (checkWinner()) {
@@ -56,8 +53,19 @@ const gameController = (function()  {
 
 })();
 
-gameController.makeTurn(0);  // Player 1 ("Timmy" with 'O')
-gameController.makeTurn(1);  // Player 2 ("Billy" with 'X')
-gameController.makeTurn(3);  // Player 1 ("Timmy" with 'O')
-gameController.makeTurn(4);  // Player 2 ("Billy" with 'X')
-gameController.makeTurn(6);  // Player 1 ("Timmy" with 'O') wins
+const displayController = {
+    boardContainer: document.getElementById('board'),
+
+    renderBoard() {
+        this.boardContainer.innerHTML = "";
+        gameBoard.board.forEach((cell, index) => {
+            const cellDiv = document.createElement('div');
+            cellDiv.classList.add('cell');
+            cellDiv.textContent = cell;
+            cellDiv.addEventListener('click', () => gameController.makeTurn(index));
+           this.boardContainer.appendChild(cellDiv);
+        })
+    }
+}
+
+displayController.renderBoard();
