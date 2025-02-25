@@ -30,10 +30,10 @@ const gameController = (function()  {
 
         // Check diagonals
         if (b[0] && b[0] === b[4] && b[0] === b[8]) {
-            return true;  // Player wins
+            return true;  
         }
         if (b[2] && b[2] === b[4] && b[2] === b[6]) {
-            return true;  // Player wins
+            return true;  
         }
 
         return false;
